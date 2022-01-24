@@ -31,7 +31,7 @@ ui <- fluidPage(
       selectInput("date","Select a date:", choices = unique(covidmap$date)),
       tags$a(href="https://github.com/MoH-Malaysia/covid19-public" ,"Source" , target="_blank"),
       h5(" "),
-      tags$a(href="https://github.com/MoH-Malaysia/covid19-public" ,"Github" , target="_blank")
+      tags$a(href="https://github.com/PravinRaj01/Covid-19-Interactive-Map-Malaysia-2022.git" ,"Github" , target="_blank")
     ),
     
     # Display the interactive map based on the tabs labelled
