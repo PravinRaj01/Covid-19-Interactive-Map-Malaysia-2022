@@ -10,6 +10,7 @@ library(jsonlite)
 library(vroom)
 library(lubridate)
 library(bslib)
+library(bsicons)  # For icons in value boxes
 
 # Source the data fetching function
 source("fetch_data.R")

@@ -217,6 +217,76 @@ shinyServer(function(input, output, session) {
   current_mapdata <- reactive({
     map_data()
   })
+  
+  # Calculate summary statistics for the selected date
+  summary_stats <- reactive({
+    req(date_choice())
+    data <- date_choice()
+    
+    list(
+      total_cases = sum(data$cases_new, na.rm = TRUE),
+      total_active = sum(data$cases_active, na.rm = TRUE),
+      total_recovered = sum(data$cases_recovered, na.rm = TRUE),
+      total_rtk_ag = sum(data$`rtk-ag`, na.rm = TRUE),
+      total_pcr = sum(data$pcr, na.rm = TRUE),
+      total_tests = sum(data$`rtk-ag`, na.rm = TRUE) + sum(data$pcr, na.rm = TRUE),
+      total_deaths = sum(data$deaths_new_dod, na.rm = TRUE),
+      states_with_deaths = sum(data$deaths_new_dod > 0, na.rm = TRUE)
+    )
+  })
+  
+  # Output summary statistics
+  output$total_cases <- renderText({
+    stats <- summary_stats()
+    format(stats$total_cases, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_active <- renderText({
+    stats <- summary_stats()
+    format(stats$total_active, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_recovered <- renderText({
+    stats <- summary_stats()
+    format(stats$total_recovered, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_rtk_ag <- renderText({
+    stats <- summary_stats()
+    format(stats$total_rtk_ag, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_pcr <- renderText({
+    stats <- summary_stats()
+    format(stats$total_pcr, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_tests <- renderText({
+    stats <- summary_stats()
+    format(stats$total_tests, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$total_deaths <- renderText({
+    stats <- summary_stats()
+    format(stats$total_deaths, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$states_with_deaths <- renderText({
+    stats <- summary_stats()
+    paste0(stats$states_with_deaths, " states")
+  })
+  
+  output$selected_date_display_short <- renderText({
+    if (is.null(input$date) || is.na(input$date)) {
+      if (!is.null(default_date())) {
+        format(default_date(), "%B %d, %Y")
+      } else {
+        "Selecting..."
+      }
+    } else {
+      format(as.Date(input$date), "%B %d, %Y")
+    }
+  })
 
   #Output for "Cases" tab
   output$cases <- renderLeaflet({

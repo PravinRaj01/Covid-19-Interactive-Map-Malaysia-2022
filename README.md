@@ -8,6 +8,7 @@ An interactive Shiny web application for visualizing COVID-19 data across Malays
 - **Calendar Date Picker**: Easy date selection with calendar interface
 - **Real-time Data**: Fetches latest data from MoH-Malaysia GitHub API
 - **Data Refresh**: Manual refresh button to update data from API
+- **Dark Mode**: Built-in dark/light theme toggle
 - **Professional UI**: Clean, modern interface with professional design
 - **State-level Visualization**: Color-coded maps showing COVID-19 metrics by Malaysian state
 
@@ -45,13 +46,14 @@ install.packages(c(
   "jsonlite",
   "vroom",
   "lubridate",
-  "bslib"
+  "bslib",
+  "bsicons"
 ))
 ```
 
 ### Data Files
 
-The following files must be present in the `Group Work` directory:
+The following files must be present in the project root directory:
 - `malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp` (and associated shapefile files)
 - `cases_state.csv` (optional - fallback if API fails)
 - `deaths_state.csv` (optional - fallback if API fails)
@@ -64,7 +66,7 @@ The following files must be present in the `Group Work` directory:
 1. Open R or RStudio
 2. Set working directory to the project root:
    ```r
-   setwd("path/to/Covid-19-Interactive-Map-Malaysia-2022/Group Work")
+   setwd("path/to/Covid-19-Interactive-Map-Malaysia-2022")
    ```
 3. Run the app:
    ```r
@@ -75,19 +77,19 @@ The following files must be present in the `Group Work` directory:
 
 **Windows (PowerShell):**
 ```powershell
-cd "Group Work\covid19_interactive_map"
+cd "Covid-19-Interactive-Map-Malaysia-2022\covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```
 
 **Windows (Command Prompt):**
 ```cmd
-cd "Group Work\covid19_interactive_map"
+cd "Covid-19-Interactive-Map-Malaysia-2022\covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```
 
 **Mac/Linux:**
 ```bash
-cd "Group Work/covid19_interactive_map"
+cd "Covid-19-Interactive-Map-Malaysia-2022/covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```
 
@@ -96,7 +98,7 @@ The app will open automatically in your default browser at `http://127.0.0.1:383
 ## Application Structure
 
 ```
-Group Work/
+Covid-19-Interactive-Map-Malaysia-2022/
 ├── covid19_interactive_map/     # Shiny app directory
 │   ├── ui.R                     # User interface definition
 │   ├── server.R                 # Server logic and data processing
@@ -105,15 +107,20 @@ Group Work/
 ├── cases_state.csv              # Local data backup (optional)
 ├── deaths_state.csv             # Local data backup (optional)
 ├── tests_state.csv              # Local data backup (optional)
-└── malaysia_*.shp               # Shapefile for map visualization
+├── malaysia_*.shp               # Shapefile for map visualization
+├── README.md                    # This file
+├── QUICK_REFERENCE.md           # Quick reference guide
+├── API_USAGE_GUIDE.md           # API usage documentation
+└── Assignment.R                 # Original assignment script
 ```
 
 ## Usage
 
 1. **Select Date**: Use the calendar date picker to select a date (defaults to latest available date)
 2. **View Maps**: Switch between Cases, Tests, and Deaths tabs to view different metrics
-3. **Interact**: Hover over states to see detailed information
-4. **Refresh Data**: Click "Refresh Data from API" to fetch the latest data
+3. **Toggle Theme**: Use the theme toggle in the top-right to switch between dark and light modes (starts in dark mode)
+4. **Interact**: Hover over states to see detailed information
+5. **Refresh Data**: Click "Refresh Data from API" to fetch the latest data
    - The calendar date range will automatically update
    - The date availability note will reflect the new date range
 
@@ -148,7 +155,7 @@ When you click "Refresh Data from API":
 ### App won't start
 - Ensure all required R packages are installed
 - Check that you're in the correct directory
-- Verify shapefile exists in `Group Work` directory
+- Verify shapefile exists in project root directory
 
 ### No data showing
 - Check internet connection (for API fetch)
