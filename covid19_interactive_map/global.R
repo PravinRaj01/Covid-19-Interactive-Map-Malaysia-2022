@@ -20,6 +20,8 @@ source("fetch_data.R")
 # So we need to go up one level to access the shapefile and CSV files
 if (basename(getwd()) == "covid19_interactive_map") {
   setwd("..")
+} else if (dir.exists("covid19_interactive_map")) {
+  setwd("covid19_interactive_map")
 } else if (file.exists("cases_state.csv")) {
   # Already in the correct directory (root or data directory)
 } else if (file.exists(file.path("Group Work", "cases_state.csv"))) {
