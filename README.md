@@ -44,7 +44,8 @@ install.packages(c(
   "httr",
   "jsonlite",
   "vroom",
-  "lubridate"
+  "lubridate",
+  "bslib"
 ))
 ```
 
@@ -88,13 +89,6 @@ Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```bash
 cd "Group Work/covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
-```
-
-### Option 3: Using the Run Script
-
-```powershell
-# From project root
-Rscript "Group Work/run_app.R"
 ```
 
 The app will open automatically in your default browser at `http://127.0.0.1:3838`

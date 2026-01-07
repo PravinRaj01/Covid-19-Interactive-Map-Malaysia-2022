@@ -271,12 +271,19 @@ custom_css <- tags$head(
 
 # Define UI for application
 ui <- fluidPage(
+  theme = bslib::bs_theme(),  # enable bslib theming (required for dark mode)
   custom_css,
   
-  # Professional Header
+  # Professional Header with light/dark mode toggle
   div(class = "main-header",
-    h1("COVID-19 Interactive Map - Malaysia"),
-    div(class = "subtitle", "Track the spread of COVID-19 across Malaysian states (2020-2025)")
+      div(style = "display: flex; align-items: center; justify-content: space-between; gap: 16px;",
+          div(
+            h1("COVID-19 Interactive Map - Malaysia"),
+            div(class = "subtitle", "Track the spread of COVID-19 across Malaysian states (2020-2025)")
+          ),
+          # Dark mode toggle (bslib 0.6.0+ / shiny 1.8.0+)
+          bslib::input_dark_mode(id = "theme_mode")
+      )
   ),
   
   sidebarLayout(

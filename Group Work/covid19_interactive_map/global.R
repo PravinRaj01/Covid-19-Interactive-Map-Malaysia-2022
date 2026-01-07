@@ -9,6 +9,7 @@ library(httr)
 library(jsonlite)
 library(vroom)
 library(lubridate)
+library(bslib)
 
 # Source the data fetching function
 source("fetch_data.R")
