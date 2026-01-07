@@ -83,7 +83,7 @@ custom_css <- tags$head(
       text-decoration: none !important;
       color: var(--bs-body-color, #212529) !important;
       transition: all 0.2s ease;
-      margin-bottom: 8px; /* Spacing between buttons */
+      margin-bottom: 0px;
     }
     
     .link-card:hover {
@@ -93,10 +93,11 @@ custom_css <- tags$head(
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     
-    .link-card i {
-      margin-right: 10px;
+    .link-card svg {
+      margin-right: 20px; 
       color: var(--bs-primary, #0d6efd);
-      font-size: 14px;
+      width: 16px;
+      height: 16px;
     }
     
     .link-card span {
@@ -121,7 +122,7 @@ ui <- bslib::page_sidebar(
     title = "Controls",
     open = TRUE,  # Start open but allow collapsing
     width = 350,  # Wider sidebar
-    style = "padding-top: 8px;", # Fixed typo (removed negative padding)
+    style = "padding-top: 0px;", # Fixed typo (removed negative padding)
     
     # Date Selection
     h6("Date Selection", class = "text-uppercase"),
@@ -180,7 +181,7 @@ ui <- bslib::page_sidebar(
     
     # Information
     h6("About This Application", class = "text-uppercase", style = "margin-top: 12px !important; margin-bottom: 0px !important;"), # Changed bottom to 0
-    tags$ul(style = "font-size: 13px; padding-left: 20px; margin-top: 0px; margin-bottom: 10px;", # Changed top from 8px to 0px
+    tags$ul(style = "font-size: 13px; padding-left: 20px; margin-top: 0px; margin-bottom: 3px;", # Changed top from 8px to 0px
       tags$li(strong("Cases:"), "Confirmed cases, imports, active, and recovered"),
       tags$li(strong("Tests:"), "RTK-Ag and RT-PCR test counts"),
       tags$li(strong("Deaths:"), "COVID-19 related deaths")
@@ -188,15 +189,18 @@ ui <- bslib::page_sidebar(
     p(style = "font-size: 12px; margin-top: 4px; margin-bottom: 10px; color: var(--bs-secondary-color, #718096);", # Optional: reduced top margin here too
       "Color intensity indicates severity - darker colors represent higher values."),
     
-    # --- UPDATED LINKS SECTION (Buttons) ---
-    h6("Resources", class = "text-uppercase", style = "margin-top: 16px !important; margin-bottom: 8px;"),
+    tags$hr(style = "margin-top: 0px; margin-bottom: 0px; border-top: 1px solid var(--bs-border-color, #dee2e6);"),
+    
+
+    # LINKS SECTION (Buttons)
+    h6("Resources", class = "text-uppercase", style = "margin-top: 0px !important; margin-bottom: 0px;"),
     
     tags$a(
       href = "https://github.com/MoH-Malaysia/covid19-public",
       target = "_blank",
       class = "link-card", # Uses the new CSS class
       bsicons::bs_icon("github"),
-      span("Data Source: MoH-Malaysia")
+      span(" Data Source: MoH-Malaysia")
     ),
     
     tags$a(
@@ -204,7 +208,7 @@ ui <- bslib::page_sidebar(
       target = "_blank",
       class = "link-card", # Uses the new CSS class
       bsicons::bs_icon("code-slash"),
-      span("Project Repository")
+      span(" Project Repository")
     )
     
   ),
