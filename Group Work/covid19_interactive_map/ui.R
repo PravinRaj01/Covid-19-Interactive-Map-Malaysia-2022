@@ -1,47 +1,119 @@
 # Professional UI for COVID-19 Interactive Map
 # Using all_mapdata from global.R for date choices
 
-# Custom CSS for professional, classy UI
+# Custom CSS for professional, classy UI with responsive design
 custom_css <- tags$head(
+  tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
   tags$style(HTML("
     /* Professional Classy UI Styles */
-    body {
+    * {
+      box-sizing: border-box;
+    }
+    
+    html, body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
       background: #f5f7fa;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
       color: #2d3748;
+    }
+    
+    .container-fluid {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      overflow: hidden;
     }
     
     .main-header {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px 32px;
-      margin-bottom: 24px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       border-bottom: 3px solid #2c5282;
+      flex-shrink: 0;
     }
     
     .main-header h1 {
       color: #1a202c;
       font-weight: 600;
-      font-size: 26px;
+      font-size: 22px;
       margin: 0;
       letter-spacing: -0.5px;
     }
     
     .main-header .subtitle {
       color: #718096;
-      font-size: 14px;
-      margin-top: 6px;
+      font-size: 13px;
+      margin-top: 4px;
       font-weight: 400;
+    }
+    
+    /* Responsive header */
+    @media (max-width: 768px) {
+      .main-header {
+        padding: 12px 16px;
+      }
+      .main-header h1 {
+        font-size: 18px;
+      }
+      .main-header .subtitle {
+        font-size: 11px;
+      }
+    }
+    
+    /* Sidebar and main panel container */
+    .row {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      margin: 0;
+      height: calc(100vh - 120px);
+      min-height: 0;
+    }
+    
+    /* Ensure sidebarLayout container uses full height */
+    .container-fluid {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      overflow: hidden;
+    }
+    
+    @media (max-width: 768px) {
+      .row {
+        height: calc(100vh - 100px);
+        flex-direction: column;
+      }
+      .container-fluid {
+        padding: 8px;
+      }
     }
     
     .sidebar-panel {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px;
+      padding: 16px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      height: fit-content;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    /* Mobile: Stack sidebar on top */
+    @media (max-width: 768px) {
+      .row {
+        flex-direction: column;
+      }
+      .sidebar-panel {
+        max-height: 40vh;
+        margin-bottom: 12px;
+      }
     }
     
     .control-card {
@@ -218,9 +290,33 @@ custom_css <- tags$head(
     .main-panel {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px;
+      padding: 16px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      min-height: 700px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* Tab panel container */
+    .tab-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .tab-pane {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    @media (max-width: 768px) {
+      .main-panel {
+        padding: 12px;
+        flex: 1;
+      }
     }
     
     .nav-tabs {
@@ -258,6 +354,58 @@ custom_css <- tags$head(
       border-radius: 4px;
       overflow: hidden;
       border: 1px solid #e2e8f0;
+      height: 100% !important;
+      width: 100%;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .control-card {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      
+      .info-card {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      
+      .btn-refresh {
+        padding: 10px;
+        font-size: 13px;
+      }
+      
+      .data-source-info {
+        padding: 8px;
+        font-size: 11px;
+      }
+      
+      .link-section {
+        margin-top: 16px;
+        padding-top: 16px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container-fluid {
+        padding: 8px;
+      }
+      
+      .main-header {
+        padding: 10px 12px;
+      }
+      
+      .main-header h1 {
+        font-size: 16px;
+      }
+      
+      .sidebar-panel {
+        padding: 12px;
+      }
+      
+      .main-panel {
+        padding: 8px;
+      }
     }
     
     .shiny-notification {
@@ -383,15 +531,15 @@ ui <- fluidPage(
         type = "tabs",
         tabPanel(
           "Cases",
-          leafletOutput("cases", height = "700px")
+          leafletOutput("cases", height = "100%")
         ),
         tabPanel(
           "Tests",
-          leafletOutput("tests", height = "700px")
+          leafletOutput("tests", height = "100%")
         ),
         tabPanel(
           "Deaths",
-          leafletOutput("deaths", height = "700px")
+          leafletOutput("deaths", height = "100%")
         )
       )
     )
