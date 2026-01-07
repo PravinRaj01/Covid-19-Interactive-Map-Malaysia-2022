@@ -8,8 +8,21 @@ library(rgeos)
 library(maptools)
 library(RColorBrewer)
 library(rgdal)
+library(lubridate)
+library(httr)
+library(jsonlite)
 
-setwd("C:/Users/Meghashyaam's PC/Documents//University Malaya/sem 1/intro to DS/Group Work")
+# Set working directory to the Group Work folder (where this script is located)
+# This script should be run from the Group Work directory
+# If not, try to find it
+if (!file.exists("cases_state.csv")) {
+  # Try going up one level and into Group Work
+  if (file.exists(file.path("..", "Group Work", "cases_state.csv"))) {
+    setwd(file.path("..", "Group Work"))
+  } else if (file.exists(file.path("Group Work", "cases_state.csv"))) {
+    setwd("Group Work")
+  }
+}
 getwd()
 
 
@@ -26,10 +39,26 @@ getwd()
 mapdata<- st_read("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp")
 # mapdata <- mapdata_old %>% select(-c(1:4, 6:15))
 
-#read in data
-covidCases <- vroom("cases_state.csv")
-covidDeaths <- vroom("deaths_state.csv")
-covidTests <- vroom("tests_state.csv")
+# Try to fetch data from API first, then fallback to local files
+source("covid19_interactive_map/fetch_data.R")
+
+api_data <- fetch_covid_data_from_api()
+
+if (!is.null(api_data) && !is.null(api_data$cases)) {
+  cat("Using data from API:", api_data$source, "\n")
+  covidCases <- api_data$cases
+  covidDeaths <- api_data$deaths
+  covidTests <- api_data$tests
+} else {
+  cat("API fetch failed, using local CSV files...\n")
+  # Fallback to local CSV files
+  covidCases <- vroom("cases_state.csv", show_col_types = FALSE)
+  covidDeaths <- vroom("deaths_state.csv", show_col_types = FALSE)
+  covidTests <- vroom("tests_state.csv", show_col_types = FALSE)
+  
+  # Keep all available data (no year filter)
+  # Dates are already in the correct format from CSV files
+}
 
 
 #clean data
@@ -48,10 +77,11 @@ all <- covidCases %>%
   left_join(covidDeaths, by = c("date", "state"))%>%
   left_join(covidTests, by = c("date", "state"))
 
-#merge covid data with modzcta shapefile
-all_mapdata <- geo_join(mapdata, all,
-                     "locname","state",
-                     how = "inner")
+#merge covid data with shapefile
+# Use left_join for sf objects (preserves spatial class)
+all_mapdata <- mapdata %>%
+  left_join(all, by = c("locname" = "state")) %>%
+  filter(!is.na(date))  # Keep only rows with matching data (inner join equivalent)
 
 setdiff(all$state,mapdata$locname)
 
@@ -62,12 +92,12 @@ setdiff(all$state,mapdata$locname)
 
 #interactive map_sample
 mylabels <- paste(
-  "New cases: ", all_mapdata()$cases_new, "<br/>" %>%
+  "New cases: ", all_mapdata$cases_new, "<br/>"
+) %>%
   lapply(htmltools::HTML)
-)
 
 pal <- colorBin(palette = "OrRd", domain = all_mapdata$cases_new, na.color = "white")
-htmltitle <- "<h5> Covid-19 Trends 2022 | Number of Cases</h5>"
+htmltitle <- "<h5> Covid-19 Trends | Number of Cases</h5>"
 
 interactive_map <- all_mapdata%>%
   st_transform(crs = "+init=epsg:4326") %>%

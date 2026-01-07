@@ -1,0 +1,41 @@
+# R
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+*.Rproj
+*.Rproj.user
+.Rproj.user/
+
+# Shiny
+rsconnect/
+*.log
+
+# Test files (optional - remove if you want to keep them)
+Group Work/test_app.R
+Group Work/quick_test.R
+Group Work/run_app.R
+Group Work/TEST_RESULTS.md
+Group Work/UI_IMPROVEMENTS.md
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Cursor AI (if any)
+.cursor/
+.cursorrules
+
