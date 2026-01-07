@@ -15,8 +15,8 @@ custom_css <- tags$head(
     .main-header {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px 32px;
-      margin-bottom: 24px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       border-bottom: 3px solid #2c5282;
     }
@@ -39,7 +39,7 @@ custom_css <- tags$head(
     .sidebar-panel {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px;
+      padding: 16px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       height: fit-content;
     }
@@ -218,9 +218,9 @@ custom_css <- tags$head(
     .main-panel {
       background: #ffffff;
       border-radius: 8px;
-      padding: 24px;
+      padding: 16px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      min-height: 700px;
+      min-height: 0;
     }
     
     .nav-tabs {
@@ -374,26 +374,26 @@ ui <- fluidPage(
       )
     ),
     
-    # Main Panel with Tabs
-    mainPanel(
-      class = "main-panel",
-      width = 9,
-      tabsetPanel(
-        id = "main_tabs",
-        type = "tabs",
+      # Main Panel with Tabs
+      mainPanel(
+        class = "main-panel",
+        width = 9,
+        tabsetPanel(
+          id = "main_tabs",
+          type = "tabs",
         tabPanel(
           "Cases",
-          leafletOutput("cases", height = "700px")
+          leafletOutput("cases", height = "640px")
         ),
         tabPanel(
           "Tests",
-          leafletOutput("tests", height = "700px")
+          leafletOutput("tests", height = "640px")
         ),
         tabPanel(
           "Deaths",
-          leafletOutput("deaths", height = "700px")
+          leafletOutput("deaths", height = "640px")
+        )
         )
       )
-    )
   )
 )
