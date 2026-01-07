@@ -134,17 +134,11 @@ shinyServer(function(input, output, session) {
           left_join(covidTests, by = c("date", "state"))
         
         # Read shapefile (go to parent directory if in app directory)
-        if (basename(getwd()) == "covid19_interactive_map") {
-          setwd("..")
-        } else if (!file.exists("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp") && 
-                   file.exists(file.path("Group Work", "malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp"))) {
-          # Fallback: if still in old structure
-          setwd("Group Work")
-        }
+        shapefile_name <- "malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp"
+
+        if (file.exists(shapefile_name)) {
+          mapdata <- st_read(shapefile_name, quiet = TRUE)
         
-        if (file.exists("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp")) {
-          mapdata <- st_read("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp", quiet = TRUE)
-          
           # Merge with shapefile
           new_data <- mapdata %>%
             left_join(all, by = c("locname" = "state")) %>%

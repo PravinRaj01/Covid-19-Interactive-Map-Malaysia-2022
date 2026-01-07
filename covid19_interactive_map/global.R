@@ -10,25 +10,11 @@ library(jsonlite)
 library(vroom)
 library(lubridate)
 library(bslib)
-library(bsicons)  # For icons in value boxes
+library(bsicons)
 
 # Source the data fetching function
-source("fetch_data.R")
-
-# Set working directory to find data files (shapefile and CSV files)
-# When Shiny runs, the working directory is the app directory (covid19_interactive_map)
-# So we need to go up one level to access the shapefile and CSV files
-if (basename(getwd()) == "covid19_interactive_map") {
-  setwd("..")
-} else if (dir.exists("covid19_interactive_map")) {
-  setwd("covid19_interactive_map")
-} else if (file.exists("cases_state.csv")) {
-  # Already in the correct directory (root or data directory)
-} else if (file.exists(file.path("Group Work", "cases_state.csv"))) {
-  # Fallback: if still in old structure
-  setwd("Group Work")
-}
-getwd()
+# (Assumes fetch_data.R is in the same folder)
+source("fetch_data.R") 
 
 # Function to load and prepare map data
 load_map_data <- function() {
@@ -47,12 +33,6 @@ load_map_data <- function() {
       covidCases <- vroom("cases_state.csv", show_col_types = FALSE)
       covidDeaths <- vroom("deaths_state.csv", show_col_types = FALSE)
       covidTests <- vroom("tests_state.csv", show_col_types = FALSE)
-      
-      # Keep all available data (no year filter)
-      if ("date" %in% colnames(covidCases)) {
-        # Dates are already in the correct format from CSV files
-        # No need to filter by year - keep all data
-      }
     } else {
       stop("No data source available. Please check your internet connection or ensure CSV files exist.")
     }
@@ -64,10 +44,13 @@ load_map_data <- function() {
     left_join(covidTests, by = c("date", "state"))
   
   # Read shapefile
-  if (file.exists("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp")) {
-    mapdata <- st_read("malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp", quiet = TRUE)
+  # CRITICAL: We look for the file directly in the current directory
+  shp_name <- "malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp"
+  
+  if (file.exists(shp_name)) {
+    mapdata <- st_read(shp_name, quiet = TRUE)
   } else {
-    stop("Shapefile not found. Please ensure malaysia_singapore_brunei_administrative_malaysia_state_province_boundary.shp exists.")
+    stop(paste("Shapefile not found:", shp_name))
   }
   
   # Merge covid data with shapefile
@@ -78,10 +61,10 @@ load_map_data <- function() {
   return(all_mapdata)
 }
 
-# Load the map data (will use API if available, otherwise fallback to local files)
+# Load the map data
 all_mapdata <- load_map_data()
 
-# Try to get source info from API fetch
+# Set source attribute
 api_data <- fetch_covid_data_from_api()
 if (!is.null(api_data) && !is.null(api_data$source)) {
   attr(all_mapdata, "source") <- api_data$source
@@ -90,6 +73,3 @@ if (!is.null(api_data) && !is.null(api_data$source)) {
 }
 
 cat("Map data loaded successfully. Total records:", nrow(all_mapdata), "\n")
-cat("Date range:", min(all_mapdata$date, na.rm = TRUE), "to", max(all_mapdata$date, na.rm = TRUE), "\n")
-cat("Data source:", attr(all_mapdata, "source"), "\n")
-
