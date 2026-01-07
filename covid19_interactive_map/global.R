@@ -14,14 +14,15 @@ library(bslib)
 # Source the data fetching function
 source("fetch_data.R")
 
-# Set working directory to the Group Work folder (parent directory of covid19_interactive_map)
+# Set working directory to find data files (shapefile and CSV files)
 # When Shiny runs, the working directory is the app directory (covid19_interactive_map)
-# So we need to go up one level to access the shapefile
+# So we need to go up one level to access the shapefile and CSV files
 if (basename(getwd()) == "covid19_interactive_map") {
   setwd("..")
 } else if (file.exists("cases_state.csv")) {
-  # Already in Group Work directory
+  # Already in the correct directory (root or data directory)
 } else if (file.exists(file.path("Group Work", "cases_state.csv"))) {
+  # Fallback: if still in old structure
   setwd("Group Work")
 }
 getwd()
