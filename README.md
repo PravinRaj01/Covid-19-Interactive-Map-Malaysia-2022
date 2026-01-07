@@ -2,6 +2,8 @@
 
 An interactive Shiny web application for visualizing COVID-19 data across Malaysian states from 2020 to 2025. The application provides three interactive maps showing cases, tests, and deaths with real-time data fetching capabilities.
 
+**🔗 Live App:** [https://pravinraj-codes.shinyapps.io/covid19_interactive_map/](https://pravinraj-codes.shinyapps.io/covid19_interactive_map/)
+
 ## Features
 
 - **Interactive Maps**: Three separate maps for Cases, Tests, and Deaths
@@ -66,30 +68,24 @@ The following files must be present in the project root directory:
 1. Open R or RStudio
 2. Set working directory to the project root:
    ```r
-   setwd("path/to/Covid-19-Interactive-Map-Malaysia-2022")
+   setwd("path/to/covid19_interactive_map")
    ```
 3. Run the app:
    ```r
-   shiny::runApp("covid19_interactive_map")
+   shiny::runApp()
    ```
 
 ### Option 2: From Terminal/Command Line
 
 **Windows (PowerShell):**
 ```powershell
-cd "Covid-19-Interactive-Map-Malaysia-2022\covid19_interactive_map"
-Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
-```
-
-**Windows (Command Prompt):**
-```cmd
-cd "Covid-19-Interactive-Map-Malaysia-2022\covid19_interactive_map"
+cd "path\to\covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```
 
 **Mac/Linux:**
 ```bash
-cd "Covid-19-Interactive-Map-Malaysia-2022/covid19_interactive_map"
+cd "path/to/covid19_interactive_map"
 Rscript -e "shiny::runApp(port=3838, host='127.0.0.1', launch.browser=TRUE)"
 ```
 
@@ -97,21 +93,21 @@ The app will open automatically in your default browser at `http://127.0.0.1:383
 
 ## Application Structure
 
+The application follows a flat file structure to ensure compatibility with shinyapps.io deployment:
+
 ```
-Covid-19-Interactive-Map-Malaysia-2022/
-├── covid19_interactive_map/     # Shiny app directory
-│   ├── ui.R                     # User interface definition
-│   ├── server.R                 # Server logic and data processing
-│   ├── global.R                 # Global variables and data loading
-│   └── fetch_data.R             # API data fetching functions
-├── cases_state.csv              # Local data backup (optional)
-├── deaths_state.csv             # Local data backup (optional)
-├── tests_state.csv              # Local data backup (optional)
-├── malaysia_*.shp               # Shapefile for map visualization
-├── README.md                    # This file
-├── QUICK_REFERENCE.md           # Quick reference guide
-├── API_USAGE_GUIDE.md           # API usage documentation
-└── Assignment.R                 # Original assignment script
+covid19_interactive_map/             # Root Project Directory
+├── ui.R                             # User interface definition
+├── server.R                         # Server logic and data processing
+├── global.R                         # Global variables and data loading
+├── fetch_data.R                     # API data fetching functions
+├── malaysia_*.shp                   # Shapefile components (.shp, .shx, .dbf, .prj)
+├── cases_state.csv                  # Local data backup (optional)
+├── deaths_state.csv                 # Local data backup (optional)
+├── tests_state.csv                  # Local data backup (optional)
+├── README.md                        # This file
+├── QUICK_REFERENCE.md               # Quick reference guide
+└── API_USAGE_GUIDE.md               # API usage documentation
 ```
 
 ## Usage
@@ -141,32 +137,6 @@ Covid-19-Interactive-Map-Malaysia-2022/
 
 **Color Intensity**: Darker colors indicate higher values for the selected metric.
 
-## Data Refresh Behavior
-
-When you click "Refresh Data from API":
-- ✅ Fetches latest data from MoH-Malaysia GitHub API
-- ✅ Updates the calendar date picker min/max range automatically
-- ✅ Updates the data availability note with new date range
-- ✅ Preserves your current date selection if it's still valid
-- ✅ Sets to latest date if current selection is outside new range
-
-## Troubleshooting
-
-### App won't start
-- Ensure all required R packages are installed
-- Check that you're in the correct directory
-- Verify shapefile exists in project root directory
-
-### No data showing
-- Check internet connection (for API fetch)
-- Verify CSV files exist if using fallback
-- Check R console for error messages
-
-### Calendar not working
-- Ensure date is within available range
-- Try refreshing data from API
-- Check browser console for JavaScript errors
-
 ## License
 
 This project uses data from the [MoH-Malaysia COVID-19 Public Repository](https://github.com/MoH-Malaysia/covid19-public), which is publicly available.
@@ -175,10 +145,3 @@ This project uses data from the [MoH-Malaysia COVID-19 Public Repository](https:
 
 - **Project Repository**: [GitHub](https://github.com/PravinRaj01/Covid-19-Interactive-Map-Malaysia-2022.git)
 - **Data Source**: [MoH-Malaysia GitHub](https://github.com/MoH-Malaysia/covid19-public)
-
-## Notes
-
-- Data is fetched from the MoH-Malaysia GitHub API on app startup
-- The app defaults to the latest available date
-- Date range updates automatically when data is refreshed
-- Local CSV files serve as fallback if API is unavailable
